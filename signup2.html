@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>स्मार्ट फ़ार्म असिस्टेंट - साइन अप</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --green-primary: #4CAF50; --border-color: #ddd; --background-color: #f0f4f7; --dark-green-bg: #4c8a5a; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); display: flex; flex-direction: column; min-height: 100vh; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 50px; background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .navbar-logo .title { font-size: 1.5rem; font-weight: 600; }
+        .navbar-logo .tagline { font-size: 0.8rem; color: #555; }
+        .auth-container { flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+        .auth-form-box { background-color: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 450px; width: 100%; }
+        .auth-form-box h1 { text-align: center; color: var(--green-primary); margin-bottom: 25px; font-size: 2rem; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 500; margin-bottom: 8px; color: #333; }
+        .form-group input:not([type="file"]), .form-group textarea { 
+            width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem;
+        }
+        .profile-photo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px; 
+        }
+        .profile-photo-container input[type="file"] {
+            flex-grow: 1; 
+            padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem;
+            background-color: #fff;
+        }
+        /* CSS for the circular photo preview */
+        #photo-preview {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%; 
+            object-fit: cover; 
+            border: 3px solid var(--green-primary);
+            background-color: #e0e0e0; 
+            display: block;
+        }
+        /* Default image styling when no image is loaded (placeholder icon) */
+        #photo-preview:not([src]) {
+            content: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23888" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>');
+            padding: 23px; 
+        }
+        .submit-button { margin-top: 30px; }
+        .submit-button button { width: 100%; padding: 12px 30px; background-color: var(--green-primary); color: white; border: none; border-radius: 25px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: background-color 0.3s; }
+        .submit-button button:hover { background-color: var(--dark-green-bg); }
+        .form-footer { text-align: center; margin-top: 20px; font-size: 0.9rem; }
+        .form-footer a { color: var(--green-primary); text-decoration: none; font-weight: 600; }
+        .navbar-menu { display: flex; align-items: center; gap: 20px; }
+        .navbar-menu a { text-decoration: none; color: #555; font-weight: 500; padding: 8px 15px; border-radius: 20px; transition: background-color 0.3s, color 0.3s; }
+        .navbar-menu a.active { background-color: var(--green-primary); color: white; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-logo">
+            <div>
+                <div class="title">🌱स्मार्ट फार्म असिस्टेंट</div>
+                <div class="tagline">IOT का उपयोग करके खेती मार्गदर्शन प्रणाली</div>
+            </div>
+        </div>
+        <div class="navbar-menu">
+            <a href="index2.html">होम</a>
+            <a href="farmdata2.html">खेत डेटा</a>
+            <a href="results2.html">परिणाम</a>
+            <a href="monitoring2.html">निगरानी</a>
+            
+            <a href="signup2.html" class="active">साइन अप</a>
+            <a href="profile2.html">प्रोफ़ाइल</a>
+            
+
+        </div>
+    </div>
+    
+    <div class="auth-container">
+        <div class="auth-form-box">
+            <h1>अपना खाता बनाएँ</h1>
+            
+            <form id="signup-form">
+                
+                <div class="form-group">
+                    <label for="profilePhotoFile">प्रोफ़ाइल फ़ोटो (वैकल्पिक)</label>
+                    <div class="profile-photo-container">
+                        <img id="photo-preview" src="" alt="फ़ोटो प्रीव्यू" title="प्रोफ़ाइल फ़ोटो प्रीव्यू">
+                        <input type="file" id="profilePhotoFile" accept="image/*"> 
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fullName">पूरा नाम</label>
+                    <input type="text" id="fullName" placeholder="अपना पूरा नाम दर्ज करें" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">ईमेल पता</label>
+                    <input type="email" id="email" placeholder="अपना ईमेल पता दर्ज करें" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="mobile">मोबाइल नंबर</label>
+                    <input type="tel" id="mobile" placeholder="अपना 10 अंकों का मोबाइल नंबर दर्ज करें" required pattern="[0-9]{10}">
+                </div>
+
+                <div class="form-group">
+                    <label for="location">स्थान (वैकल्पिक)</label>
+                    <input type="text" id="location" placeholder="उदाहरण: शहर, राज्य, या फ़ार्म का नाम">
+                </div>
+                
+                <div class="form-group">
+                    <label for="username">यूज़रनेम</label>
+                    <input type="text" id="username" placeholder="एक अद्वितीय यूज़रनेम चुनें (केवल संख्याएँ)" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">पासवर्ड</label>
+                    <input type="password" id="password" placeholder="एक पासवर्ड बनाएँ" required>
+                </div>
+                
+                <div class="submit-button">
+                    <button type="submit">साइन अप करें</button>
+                </div>
+            </form>
+            
+            <p class="form-footer">
+                पहले से ही एक खाता है? <a href="login2.html">लॉग इन</a>
+            </p>
+        </div>
+    </div>
+
+<script>
+const MAX_FILE_SIZE = 2097152; // 2MB
+
+// Function to handle the immediate preview of the selected image
+document.getElementById('profilePhotoFile').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('photo-preview');
+    
+    if (file) {
+        if (file.size > MAX_FILE_SIZE) {
+            alert('चुनी गई छवि बहुत बड़ी है। कृपया 2MB से कम की फ़ाइल चुनें।');
+            preview.removeAttribute('src'); 
+            event.target.value = null; 
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result; 
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.removeAttribute('src'); 
+    }
+});
+
+// Function to convert file to Base64 string (used in submit)
+function getBase64(file) {
+    return new Promise((resolve, reject) => {
+        if (!file || file.size > MAX_FILE_SIZE) {
+            reject('फ़ाइल अमान्य है या बहुत बड़ी है (अधिकतम 2MB)।');
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+    });
+}
+
+
+document.getElementById('signup-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    const fullName = document.getElementById('fullName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const mobile = document.getElementById('mobile').value.trim();
+    const location = document.getElementById('location').value.trim();
+    const photoFile = document.getElementById('profilePhotoFile').files[0];
+
+    if (username.length < 3 || password.length < 6) {
+        alert('यूज़रनेम कम से कम 3 वर्णों का और पासवर्ड कम से कम 6 वर्णों का होना चाहिए।');
+        return;
+    }
+
+    const ALL_USERS_KEY = 'users';
+    const users = JSON.parse(localStorage.getItem(ALL_USERS_KEY) || '{}');
+
+    if (users[username]) {
+        alert(`यूज़रनेम '${username}' पहले से मौजूद है। कृपया कोई दूसरा चुनें।`);
+        return;
+    }
+
+    let profilePhotoBase64 = '';
+    
+    // Convert the file to a Base64 string if a file was selected
+    if (photoFile) {
+        try {
+            profilePhotoBase64 = await getBase64(photoFile);
+        } catch (error) {
+            console.error('फ़ाइल पढ़ने में त्रुटि:', error);
+            alert(`फ़ोटो फ़ाइल को पढ़ने में एक त्रुटि हुई: ${error}। कृपया पुनः प्रयास करें।`);
+            return;
+        }
+    }
+
+    // Save the new user data
+    users[username] = { 
+        username: username, 
+        password: password, // In a real app, this should be hashed!
+        fullName: fullName, 
+        email: email,
+        mobile: mobile,
+        location: location,
+        profilePhotoBase64: profilePhotoBase64 
+    };
+    
+    try {
+        localStorage.setItem(ALL_USERS_KEY, JSON.stringify(users));
+
+        alert(`${username} के लिए साइन अप सफल रहा! कृपया लॉग इन करें।`);
+        // Assuming you have a login.html file
+        window.location.href = "login2.html"; 
+
+    } catch (e) {
+        if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+            alert("त्रुटि: संग्रहण सीमा तक पहुँच गया। अपने ब्राउज़र के स्थानीय संग्रहण को साफ़ करें या एक छोटी प्रोफ़ाइल फ़ोटो का उपयोग करें।");
+        } else {
+            alert("साइनअप के दौरान एक अज्ञात त्रुटि हुई।");
+        }
+    }
+});
+</script>
+</body>
+</html>

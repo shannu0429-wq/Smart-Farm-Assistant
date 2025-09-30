@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ஸ்மார்ட் ஃபார்ம் அசிஸ்டன்ட் - டாஷ்போர்டு</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables */
+        :root {
+            --green-primary: #4CAF50;
+            --green-light: #e8f5e9;
+            --gray-text: #555;
+            --border-color: #ddd;
+            --background-color: #f0f4f7;
+            --success-dot: #28a745;
+            --dark-green-bg: #4c8a5a;
+        }
+
+        /* Global Reset and Typography */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: var(--background-color);
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .navbar-logo .title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .navbar-logo .tagline {
+            font-size: 0.8rem;
+            color: var(--gray-text);
+        }
+
+        .navbar-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .navbar-menu a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .navbar-menu a:hover,
+        .navbar-menu a.active {
+            background-color: var(--green-primary);
+            color: white;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Dashboard Section (Data Cards & Recommendations) */
+        .dashboard-section {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-header {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dashboard-cards {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            flex: 1;
+            min-width: 200px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .card h3 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 5px;
+            line-height: 1;
+        }
+
+        .card p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .card-status {
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .card-temp { background-color: #e8f5f9; color: #337ab7; }
+        .card-soil { background-color: #e8f9e8; color: #4CAF50; }
+        .card-ph { background-color: #fffde7; color: #fbc02d; }
+        .card-price { background-color: #fcebeb; color: #e57373; }
+
+        .card-temp .card-status { color: #337ab7; }
+        .card-soil .card-status { color: #4CAF50; }
+        .card-ph .card-status { color: #fbc02d; }
+        .card-price .card-status { color: #e57373; }
+
+        .recommendations-section {
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .recommendations-section h3 {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .recommendations-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .recommendations-list li {
+            margin-bottom: 10px;
+            font-size: 1em;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Notifications Section */
+        .notifications-section {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .notifications-header {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notifications-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .notification-box {
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .notification-box p {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .notification-box small {
+            font-size: 0.7em;
+            color: #666;
+        }
+
+        .notification-header {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+        /* Notification Colors */
+        .notif-weather { background-color: #e8f9e8; }
+        .notif-weather .notification-header { color: #4CAF50; }
+        .notif-price { background-color: #e8f0ff; }
+        .notif-price .notification-header { color: #5a8dff; }
+        .notif-care { background-color: #fffde7; }
+        .notif-care .notification-header { color: #fbc02d; }
+        .notif-urgent { background-color: #ffe6e6; }
+        .notif-urgent .notification-header { color: #e57373; }
+
+        /* Language Section */
+        .language-section {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .language-header {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-list {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-wrap: wrap;
+        }
+
+        .language-list li {
+            font-size: 1em;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* Contact Section (FIXED STRUCTURE) */
+        .contact-section {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .contact-section h5 {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .contact-section p {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .contact-details {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        .contact-details li {
+            font-size: 1em;
+            margin-bottom: 5px;
+        }
+
+        .contact-details li strong {
+            margin-right: 5px;
+            font-weight: 600;
+        }
+
+        .contact-details a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="navbar-logo">
+            <div>
+               <div class="title">🌱ஸ்மார்ட் ஃபார்ம் அசிஸ்டன்ட்</div>
+                <div class="tagline">IOT பயன்படுத்தி விவசாய வழிகாட்டி அமைப்பு</div>
+            </div>
+        </div>
+        <div class="navbar-menu">
+                <a href="index5.html">முகப்பு</a>
+            <a href="farmdata5.html" >பண்ணை தரவு</a> 
+            <a href="results5.html">முடிவுகள்</a>
+            <a href="monitoring5.html"class="active">கண்காணிப்பு</a>
+            <a href="profile5.html">சுயவிவரம்</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="dashboard-section">
+            <h2 class="dashboard-header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-monitor"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                நேரடிப் பண்ணை டாஷ்போர்டு
+            </h2>
+            <div class="dashboard-cards">
+                <div class="card card-temp">
+                    <h3>25°C</h3><p>வெப்பநிலை</p><span class="card-status">சாதாரண</span>
+                </div>
+                <div class="card card-soil">
+                    <h3>68%</h3><p>மண் ஈரப்பதம்</p><span class="card-status">உகந்தது</span>
+                </div>
+                <div class="card card-ph">
+                    <h3>6.8</h3><p>மண் pH</p><span class="card-status">நல்லது</span>
+                </div>
+                <div class="card card-price">
+                    <h3>₹2,350</h3><p>தற்போதைய விலை</p><span class="card-status">↗️ உயர்வு</span>
+                </div>
+            </div>
+
+            <div class="recommendations-section">
+                <h3>இன்றைய பரிந்துரைகள்</h3>
+                <ul class="recommendations-list">
+                    <li>✔️ மண் ஈரப்பதம் உகந்தது - இன்று நீர்ப்பாசனம் தேவையில்லை</li>
+                    <li>🌧️ நாளை லேசான மழை எதிர்பார்க்கப்படுகிறது - உரமிடுவதை ஒத்திவைக்கவும்</li>
+                    <li>📈 மக்காச்சோளத்தின் விலை 3% உயர்ந்துள்ளது - அறுவடைக்கு திட்டமிட இது ஒரு நல்ல நேரம்</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="notifications-section">
+            <h2 class="notifications-header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                சமீபத்திய அறிவிப்புகள் (வாட்ஸ்அப் பாணி)
+            </h2>
+            <div class="notifications-grid">
+                <div class="notification-box notif-weather">
+                    <div class="notification-header">🌧️ வானிலை எச்சரிக்கை:</div>
+                    <p>நாளை பலத்த மழை எதிர்பார்க்கப்படுகிறது. தேவைப்பட்டால் உங்கள் பயிர்களை மூடி வைக்கவும்!</p>
+                    <small>2 மணிநேரத்திற்கு முன்</small>
+                </div>
+                <div class="notification-box notif-price">
+                    <div class="notification-header">💰 விலை எச்சரிக்கை:</div>
+                    <p>மக்காச்சோளத்தின் விலை 8% உயர்ந்துள்ளது! விரைவில் விற்பனை செய்ய பரிசீலிக்கவும்.</p>
+                    <small>1 நாள் முன்பு</small>
+                </div>
+                <div class="notification-box notif-care">
+                    <div class="notification-header">📅 பராமரிப்பு நினைவூட்டல்:</div>
+                    <p>இரண்டாவது டோஸ் உரம் இடுவதற்கான நேரம்.</p>
+                    <small>3 நாட்களுக்கு முன்</small>
+                </div>
+                <div class="notification-box notif-urgent">
+                    <div class="notification-header">⚠️ அவசரம்:</div>
+                    <p>மண் ஈரப்பதம் 35% ஆக குறைந்துள்ளது. 24 மணி நேரத்திற்குள் நீர்ப்பாசனம் பரிந்துரைக்கப்படுகிறது.</p>
+                    <small>5 நாட்களுக்கு முன்</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="language-section">
+            <h2 class="language-header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                உங்கள் உள்ளூர் மொழியில் உள்ளது
+            </h2>
+            <ul class="language-list">
+                <li><span style="color: #5cb85c;">●</span> <a href="index.html">English</a></li>
+                <li><span style="color: #5cb85c;">●</span> <a href="index1.html">తెలుగు(Telugu)</a></li>
+                <li><span style="color: #5cb85c;">●</span> <a href="index2.html">हिंदी (Hindi)</a></li>
+                <li><span style="color: #5cb85c;">●</span> <a href="index3.html">Kannada (ಕನ್ನಡ)</a></li>
+                <li><span style="color: #5cb85c;">●</span> <a href="index4.html">Malayalam (മലയാളം)</a></li>
+                <li><span style="color: #5cb85c;">●</span> <a href="index5.html">Tamil (தமிழ்)</a></li>
+            </ul>
+        </div>
+        
+        <div class="contact-section">
+            <h5>ஏதேனும் கேள்விகளுக்கு, எங்களை தொடர்பு கொள்ளவும்:</h5>
+            <p>உங்களுக்கு ஏதேனும் கேள்விகள் அல்லது கவலைகள் இருந்தால் உங்களுக்கு உதவ எங்கள் ஆதரவு குழு தயாராக உள்ளது.</p>
+            
+            <ul class="contact-details">
+                <li><strong>தொலைபேசி:</strong> <a href="tel:+919392799157">+91 9392799157</a></li>
+                <li><strong>மின்னஞ்சல்:</strong> <a href="mailto:support@smartfarm.com">support@smartfarm.com</a></li>
+                <li><strong>வாட்ஸ்அப்:</strong> <a href="https://wa.me/919392799157?text=Hello%20Smart%20Farm%20Support%2C%20I%20have%20a%20query%20regarding%20my%20dashboard%20data.">+91 9392799157</a></li>
+            </ul>
+            
+            <p>நாங்கள் இந்திய நேரப்படி காலை 9 மணி முதல் மாலை 6 மணி வரை, திங்கள் முதல் சனிக்கிழமை வரை கிடைக்கிறோம்.</p>
+        </div>
+    </div>
+</body>
+</html>

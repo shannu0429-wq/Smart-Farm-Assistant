@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>स्मार्ट फार्म असिस्टेंट - डैशबोर्ड</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables */
+        :root {
+            --green-primary: #4CAF50;
+            --green-light: #e8f5e9;
+            --gray-text: #555;
+            --border-color: #ddd;
+            --background-color: #f0f4f7;
+            --success-dot: #28a745;
+            --dark-green-bg: #4c8a5a;
+        }
+
+        /* Global Reset and Typography */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: var(--background-color);
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .navbar-logo .title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .navbar-logo .tagline {
+            font-size: 0.8rem;
+            color: var(--gray-text);
+        }
+
+        .navbar-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .navbar-menu a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .navbar-menu a:hover,
+        .navbar-menu a.active {
+            background-color: var(--green-primary);
+            color: white;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Dashboard Section (Data Cards & Recommendations) */
+        .dashboard-section {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-header {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dashboard-cards {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            flex: 1;
+            min-width: 200px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .card h3 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 5px;
+            line-height: 1;
+        }
+
+        .card p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .card-status {
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .card-temp { background-color: #e8f5f9; color: #337ab7; }
+        .card-soil { background-color: #e8f9e8; color: #4CAF50; }
+        .card-ph { background-color: #fffde7; color: #fbc02d; }
+        .card-price { background-color: #fcebeb; color: #e57373; }
+
+        .card-temp .card-status { color: #337ab7; }
+        .card-soil .card-status { color: #4CAF50; }
+        .card-ph .card-status { color: #fbc02d; }
+        .card-price .card-status { color: #e57373; }
+
+        .recommendations-section {
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .recommendations-section h3 {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .recommendations-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .recommendations-list li {
+            margin-bottom: 10px;
+            font-size: 1em;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Notifications Section */
+        .notifications-section {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .notifications-header {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notifications-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .notification-box {
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .notification-box p {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .notification-box small {
+            font-size: 0.7em;
+            color: #666;
+        }
+
+        .notification-header {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+        /* Notification Colors */
+        .notif-weather { background-color: #e8f9e8; }
+        .notif-weather .notification-header { color: #4CAF50; }
+        .notif-price { background-color: #e8f0ff; }
+        .notif-price .notification-header { color: #5a8dff; }
+        .notif-care { background-color: #fffde7; }
+        .notif-care .notification-header { color: #fbc02d; }
+        .notif-urgent { background-color: #ffe6e6; }
+        .notif-urgent .notification-header { color: #e57373; }
+
+        /* Language Section */
+        .language-section {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .language-header {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-list {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-wrap: wrap;
+        }
+
+        .language-list li {
+            font-size: 1em;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* Contact Section (FIXED STRUCTURE) */
+        .contact-section {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .contact-section h5 {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .contact-section p {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .contact-details {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        .contact-details li {
+            font-size: 1em;
+            margin-bottom: 5px;
+        }
+
+        .contact-details li strong {
+            margin-right: 5px;
+            font-weight: 600;
+        }
+
+        .contact-details a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="navbar-logo">
+            <div>
+                <div class="title">🌱 स्मार्ट फार्म असिस्टेंट</div>
+                <div class="tagline">IOT का उपयोग करके खेती मार्गदर्शन प्रणाली</div>
+            </div>
+        </div>
+        <div class="navbar-menu">
+             <a href="index2.html">होम</a>
+            <a href="farmdata2.html" >खेत डेटा</a> 
+            <a href="results2.html">परिणाम</a>
+            <a href="monitoring2.html"class="active">निगरानी</a>
+            <a href="profile2.html">प्रोफ़ाइल</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="dashboard-section">
+            <h2 class="dashboard-header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-monitor"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                लाइव फार्म डैशबोर्ड
+            </h2>
+            <div class="dashboard-cards">
+                <div class="card card-temp">
+                    <h3>25°C</h3><p>तापमान</p><span class="card-status">सामान्य</span>
+                </div>
+                <div class="card card-soil">
+                    <h3>68%</h3><p>मिट्टी की नमी</p><span class="card-status">इष्टतम</span>
+                </div>
+                <div class="card card-ph">
+                    <h3>6.8</h3><p>मिट्टी का pH</p><span class="card-status">अच्छा</span>
+                </div>
+                <div class="card card-price">
+                    <h3>₹2,350</h3><p>वर्तमान मूल्य</p><span class="card-status">↗️ बढ़ रहा है</span>
+                </div>
+            </div>
+
+            <div class="recommendations-section">
+                <h3>आज की सिफारिशें</h3>
+                <ul class="recommendations-list">
+                    <li>✔️ मिट्टी की नमी इष्टतम है - आज सिंचाई की आवश्यकता नहीं है</li>
+                    <li>🌧️ कल हल्की बारिश की उम्मीद - उर्वरक अनुप्रयोग को स्थगित करें</li>
+                    <li>📈 मकई की कीमतों में 3% की वृद्धि - कटाई की योजना बनाने का अच्छा समय है</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="notifications-section">
+            <h2 class="notifications-header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                हाल की सूचनाएं (व्हाट्सएप शैली)
+            </h2>
+            <div class="notifications-grid">
+                <div class="notification-box notif-weather">
+                    <div class="notification-header">🌧️ मौसम अलर्ट:</div>
+                    <p>कल भारी बारिश की उम्मीद है। यदि आवश्यक हो तो अपनी फसलों को ढक दें!</p>
+                    <small>2 घंटे पहले</small>
+                </div>
+                <div class="notification-box notif-price">
+                    <div class="notification-header">💰 मूल्य अलर्ट:</div>
+                    <p>मकई की कीमतों में 8% की वृद्धि हुई! जल्द ही बेचने पर विचार करें।</p>
+                    <small>1 दिन पहले</small>
+                </div>
+                <div class="notification-box notif-care">
+                    <div class="notification-header">📅 देखभाल अनुस्मारक:</div>
+                    <p>उर्वरक अनुप्रयोग की दूसरी खुराक का समय आ गया है।</p>
+                    <small>3 दिन पहले</small>
+                </div>
+                <div class="notification-box notif-urgent">
+                    <div class="notification-header">⚠️ अत्यावश्यक:</div>
+                    <p>मिट्टी की नमी 35% तक गिर गई है। 24 घंटे के भीतर सिंचाई की सिफारिश की जाती है।</p>
+                    <small>5 दिन पहले</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="language-section">
+            <h2 class="language-header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                आपकी स्थानीय भाषा में उपलब्ध है
+            </h2>
+            <ul class="language-list">
+                <li><span style="color: #5cb85c;">●</span> <a href="index.html">English</a></li>
+                <li><span style="color: #5cb85c;">●</span> <a href="index1.html">తెలుగు(Telugu)</a></li>
+                <li><span style="color: #5cb85c;">●</span> <a href="index2.html">हिंदी (Hindi)</a></li>
+                <li><span style="color: #5cb85c;">●</span> <a href="index3.html">Kannada (ಕನ್ನಡ)</a></li>
+                <li><span style="color: #5cb85c;">●</span> <a href="index4.html">Malayalam (മലയാളം)</a></li>
+                <li><span style="color: #5cb85c;">●</span> <a href="index5.html">Tamil (தமிழ்)</a></li>
+            </ul>
+        </div>
+        
+        <div class="contact-section">
+            <h5>किसी भी प्रश्न के लिए, हमसे संपर्क करें:</h5>
+            <p>हमारी सहायता टीम आपके किसी भी प्रश्न या चिंता में आपकी सहायता करने के लिए उपलब्ध है।</p>
+            
+            <ul class="contact-details">
+                <li><strong>फोन:</strong> <a href="tel:+919392799157">+91 9392799157</a></li>
+                <li><strong>ईमेल:</strong> <a href="mailto:support@smartfarm.com">support@smartfarm.com</a></li>
+                <li><strong>व्हाट्सएप:</strong> <a href="https://wa.me/919392799157?text=Hello%20Smart%20Farm%20Support%2C%20I%20have%20a%20query%20regarding%20my%20dashboard%20data.">+91 9392799157</a></li>
+            </ul>
+            
+            <p>हम IST सुबह 9 बजे से शाम 6 बजे तक, सोमवार से शनिवार तक उपलब्ध हैं।</p>
+        </div>
+    </div>
+</body>
+</html>

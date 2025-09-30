@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>സ്മാർട്ട് ഫാം അസിസ്റ്റന്റ് - ലോഗിൻ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --green-primary: #4CAF50; 
+            --border-color: #ddd; 
+            --background-color: #f0f4f7; 
+            --dark-green-bg: #4c8a5a;
+            --red-alert: #dc3545; 
+            --blue-info: #007bff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); display: flex; flex-direction: column; min-height: 100vh; }
+        
+        /* Navbar Styles */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 50px; background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .navbar-logo .title { font-size: 1.5rem; font-weight: 600; }
+        .navbar-logo .tagline { font-size: 0.8rem; color: #555; }
+        .navbar-menu { display: flex; align-items: center; gap: 20px; }
+        .navbar-menu a { text-decoration: none; color: #555; font-weight: 500; padding: 8px 15px; border-radius: 20px; transition: background-color 0.3s, color 0.3s; }
+        .navbar-menu a.active { background-color: var(--green-primary); color: white; }
+        
+        /* Auth Container & Form Box */
+        .auth-container { flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+        .auth-form-box { background-color: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 450px; width: 100%; }
+        .auth-form-box h1 { text-align: center; color: var(--green-primary); margin-bottom: 25px; font-size: 2rem; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 500; margin-bottom: 8px; color: #333; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; }
+        .submit-button { margin-top: 30px; }
+        .submit-button button { width: 100%; padding: 12px 30px; background-color: var(--green-primary); color: white; border: none; border-radius: 25px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: background-color 0.3s; }
+        .submit-button button:hover { background-color: var(--dark-green-bg); }
+        .form-footer { text-align: center; margin-top: 20px; font-size: 0.9rem; }
+        .form-footer a { color: var(--green-primary); text-decoration: none; font-weight: 600; }
+        
+        /* Specific Reset Styles */
+        .forgot-password-link {
+            display: block;
+            text-align: right;
+            margin-top: -10px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        .forgot-password-link a {
+            color: var(--red-alert);
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        #reset-section {
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            margin-top: 20px;
+            text-align: left;
+        }
+        #reset-section h2 {
+            font-size: 1.4rem;
+            color: var(--blue-info);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .reset-button-primary {
+            background-color: var(--blue-info) !important;
+        }
+        .reset-button-primary:hover {
+            background-color: #0056b3 !important;
+        }
+        .reset-info p {
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-logo">
+            <div>
+                 <div class="title">🌱സ്മാർട്ട് ഫാം അസിസ്റ്റന്റ്</div>
+                <div class="tagline">IOT ഉപയോഗിച്ചുള്ള കൃഷി മാർഗ്ഗനിർദ്ദേശ സംവിധാനം</div>
+            </div>
+        </div>
+        <div class="navbar-menu">
+            <a href="index4.html">ഹോം</a>
+            <a href="farmdata4.html">ഫാം ഡാറ്റ</a>
+            <a href="monitoring4.html">നിരീക്ഷണം</a>
+            <a href="login4.html" class="active">ലോഗിൻ</a>
+            <a href="profile4.html">പ്രൊഫൈൽ</a>
+
+
+        </div>
+    </div>
+    
+    <div class="auth-container">
+        <div class="auth-form-box">
+            
+            <h1 id="form-title">വീണ്ടും സ്വാഗതം!</h1>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">ഉപയോക്തൃനാമം</label>
+                    <input type="text" id="username" placeholder="നിങ്ങളുടെ ഉപയോക്തൃനാമം നൽകുക" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">പാസ്‌വേഡ്</label>
+                    <input type="password" id="password" placeholder="നിങ്ങളുടെ പാസ്‌വേഡ് നൽകുക" required>
+                </div>
+                
+                <div class="forgot-password-link">
+                    <a href="#" onclick="showResetForm(event)">പാസ്‌വേഡ് മറന്നോ?</a>
+                </div>
+
+                <div class="submit-button">
+                    <button type="submit">ലോഗിൻ ചെയ്യുക</button>
+                </div>
+            </form>
+            
+            <form id="reset-form" style="display:none;">
+                <div id="reset-section">
+                    <h2>പാസ്‌വേഡ് റീസെറ്റ്</h2>
+                    
+                    <div class="reset-info">
+                        <p><strong>ഘട്ടം 1: കോഡ് നേടുക</strong> - WhatsApp വഴി ഞങ്ങളുടെ സപ്പോർട്ടിൽ നിന്ന് ഒരു താൽക്കാലിക കോഡിനായി അഭ്യർത്ഥിക്കാൻ താഴെയുള്ള ബട്ടണിൽ ക്ലിക്കുചെയ്യുക.</p>
+                        <button type="button" onclick="requestPasswordReset()" class="submit-button reset-button-primary">
+                            <span style="font-size: 1.1rem; margin-right: 5px;">💬</span> WhatsApp വഴി റീസെറ്റ് കോഡ് അഭ്യർത്ഥിക്കുക
+                        </button>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 25px;">
+                        <p style="font-weight: 600; color: #333; margin-bottom: 10px;">ഘട്ടം 2: കോഡും പുതിയ പാസ്‌വേഡും നൽകുക</p>
+                        <label for="reset-code">താൽക്കാലിക കോഡ്</label>
+                        <input type="text" id="reset-code" placeholder="WhatsApp വഴി ഞങ്ങളുടെ സപ്പോർട്ടിൽ നിന്ന് ലഭിച്ച കോഡ് നൽകുക." required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-password">പുതിയ പാസ്‌വേഡ്</label>
+                        <input type="password" id="new-password" placeholder="പുതിയ പാസ്‌വേഡ് നൽകുക" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirm-password">പുതിയ പാസ്‌വേഡ് സ്ഥിരീകരിക്കുക</label>
+                        <input type="password" id="confirm-password" placeholder="പുതിയ പാസ്‌വേഡ് സ്ഥിരീകരിക്കുക" required>
+                    </div>
+
+                    <div class="submit-button">
+                        <button type="submit" class="reset-button-primary">പുതിയ പാസ്‌വേഡ് സജ്ജമാക്കുക</button>
+                    </div>
+                    
+                    <div class="form-footer">
+                        <a href="#" onclick="showLoginForm(event)">ലോഗിനിലേക്ക് മടങ്ങുക</a>
+                    </div>
+                </div>
+            </form>
+
+            <p class="form-footer" id="signup-footer">
+                അക്കൗണ്ട് ഇല്ലേ? <a href="signup4.html">സൈൻ അപ്പ് ചെയ്യുക</a>
+            </p>
+        </div>
+    </div>
+
+<script>
+const WHATSAPP_NUMBER = "919392799157";
+const CORRECT_CODE_PREFIX = "RESET-PASS-"; 
+
+// --- Form Switching Functions (UPDATED) ---
+
+function showResetForm(event) {
+    event.preventDefault();
+    const username = document.getElementById('username').value.trim();
+
+    // Check if username is entered before showing the reset form
+    if (username === "") {
+        alert("ദയവായി ആദ്യം ഇൻപുട്ട് ഫീൽഡിൽ നിങ്ങളുടെ രജിസ്റ്റർ ചെയ്ത **ഉപയോക്തൃനാമം** നൽകുക.");
+        return;
+    }
+    
+    // Check if the user exists before proceeding to reset
+    const users = JSON.parse(localStorage.getItem('users') || '{}');
+    if (!users[username]) {
+        alert("പിശക്: ഉപയോക്തൃനാമം കണ്ടെത്തിയില്ല. ദയവായി സ്പെല്ലിംഗ് പരിശോധിക്കുക അല്ലെങ്കിൽ സൈൻ അപ്പ് ചെയ്യുക.");
+        return;
+    }
+
+    // Toggle the visibility and update titles
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('password').value = ''; // Clear password field for security
+    
+    document.getElementById('reset-form').style.display = 'block';
+    document.getElementById('form-title').textContent = 'അക്കൗണ്ട് വീണ്ടെടുക്കൽ';
+    document.getElementById('signup-footer').style.display = 'none';
+}
+
+function showLoginForm(event) {
+    event.preventDefault();
+    document.getElementById('login-form').style.display = 'block';
+    document.getElementById('reset-form').style.display = 'none';
+    document.getElementById('form-title').textContent = 'വീണ്ടും സ്വാഗതം!';
+    document.getElementById('signup-footer').style.display = 'block';
+    
+    // Clear reset fields
+    document.getElementById('reset-code').value = '';
+    document.getElementById('new-password').value = '';
+    document.getElementById('confirm-password').value = '';
+}
+
+
+// --- 1. Login Logic ---
+
+document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+
+    const users = JSON.parse(localStorage.getItem('users') || '{}');
+    const user = users[username];
+
+    if (user && user.password === password) {
+        localStorage.setItem('currentUser', username); 
+        alert(`ലോഗിൻ വിജയിച്ചു! സ്വാഗതം, ${user.fullName || username}.`);
+        window.location.href = "farmdata4.html";
+    } else {
+        alert('അസാധുവായ ഉപയോക്തൃനാമം അല്ലെങ്കിൽ പാസ്‌വേഡ്. ദയവായി വീണ്ടും ശ്രമിക്കുക.');
+    }
+});
+
+
+// --- 2. Request Reset Code (WhatsApp) ---
+
+function requestPasswordReset() {
+    const username = document.getElementById('username').value.trim(); // Username is read from the login form field
+    
+    const message = encodeURIComponent(
+        `I need to reset my password for the Smart Farm Assistant.\n\nMy registered Username is: ${username}\n\nPlease help me with the password reset process.`
+    );
+    
+    const whatsappURL = `https://wa.me/${9392799157}?text=${message}`;
+    
+    window.open(whatsappURL, '_blank');
+    
+    alert(`ഒരു WhatsApp ചാറ്റ് തുറന്നിരിക്കുന്നു. ഞങ്ങളുടെ ടീം നിങ്ങളുടെ ഐഡന്റിറ്റി പരിശോധിച്ച് നിങ്ങളുടെ താൽക്കാലിക റീസെറ്റ് കോഡ് അയയ്ക്കും, ആ കോഡ് താഴെയുള്ള ഫോമിൽ ഉപയോഗിക്കും.`);
+}
+
+
+// --- 3. Execute Password Reset (Local Storage Update) ---
+
+document.getElementById('reset-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    // IMPORTANT: Read username from the login form's input field, which remains on the page
+    const username = document.getElementById('username').value.trim();
+    const resetCode = document.getElementById('reset-code').value.trim().toUpperCase();
+    const newPassword = document.getElementById('new-password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    
+    if (newPassword !== confirmPassword) {
+        alert("പുതിയ പാസ്‌വേഡുകൾ പൊരുത്തപ്പെടുന്നില്ല. ദയവായി വീണ്ടും ശ്രമിക്കുക.");
+        return;
+    }
+
+    // A. Validate the Temporary Code (Format Check)
+    if (!resetCode.startsWith(CORRECT_CODE_PREFIX) || resetCode.length < 10) {
+        alert("അസാധുവായ താൽക്കാലിക റീസെറ്റ് കോഡ്. ദയവായി സപ്പോർട്ടിൽ നിന്ന് നിങ്ങൾക്ക് ലഭിച്ച കോഡ് സ്ഥിരീകരിക്കുക.");
+        return;
+    }
+    
+    // B. Locate User Data in Local Storage (using the 'users' key)
+    const users = JSON.parse(localStorage.getItem('users') || '{}');
+    let user = users[username];
+
+    if (!user) {
+        alert("പിശക്: സ്റ്റോറേജിൽ ഉപയോക്തൃനാമം കണ്ടെത്തിയില്ല. ദയവായി ശരിയായ ഉപയോക്തൃനാമം വീണ്ടും നൽകി വീണ്ടും ശ്രമിക്കുക.");
+        return;
+    }
+    
+    // C. Reset the Password
+    user.password = newPassword; 
+    
+    // D. Save the Updated Data back to the 'users' object
+    users[username] = user;
+    localStorage.setItem('users', JSON.stringify(users));
+    
+    alert("✅ പാസ്‌വേഡ് വിജയകരമായി റീസെറ്റ് ചെയ്തു! ഇപ്പോൾ നിങ്ങൾക്ക് നിങ്ങളുടെ പുതിയ പാസ്‌വേഡ് ഉപയോഗിച്ച് ലോഗിൻ ചെയ്യാം.");
+    
+    // Switch back to the login view and clear reset fields
+    showLoginForm(event);
+});
+</script>
+</body>
+</html>

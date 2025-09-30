@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>സ്മാർട്ട് ഫാം അസിസ്റ്റന്റ് - ഫലങ്ങൾ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green-primary: #4CAF50;
+            --green-light: #e8f5e9;
+            --gray-text: #555;
+            --background-color: #f0f4f7;
+            --dark-green-bg: #4c8a5a;
+            --red-alert: #dc3545;
+            --yellow-warn: #ffc107;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); line-height: 1.6; color: #333; }
+        
+        /* Navigation Bar */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 50px; background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .navbar-logo .title { font-size: 1.5rem; font-weight: 600; }
+        .navbar-logo .tagline { font-size: 0.8rem; color: var(--gray-text); }
+        .navbar-menu { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+        .navbar-menu a { text-decoration: none; color: #555; font-weight: 500; padding: 8px 15px; border-radius: 20px; transition: background-color 0.3s, color 0.3s; }
+        .navbar-menu a.active { background-color: var(--green-primary); color: white; }
+
+        /* Result Box */
+        .container { display: flex; justify-content: center; align-items: flex-start; padding: 40px 20px; }
+        .result-box { background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 800px; width: 100%; line-height: 1.8; }
+        
+        h2 { color: var(--green-primary); margin-bottom: 15px; border-bottom: 2px solid var(--green-light); padding-bottom: 10px; }
+        h3 { color: var(--dark-green-bg); margin-top: 20px; margin-bottom: 10px; }
+        
+        .section { margin-bottom: 25px; padding: 10px 0; }
+        
+        .info-pair { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed #eee; }
+        .info-pair:last-of-type { border-bottom: none; }
+        
+        .info-pair .label { font-weight: 500; color: #333; }
+        .info-pair .value { font-weight: 600; color: var(--gray-text); }
+        
+        /* Cost Specific Styles */
+        .cost-section .info-pair .value { color: var(--red-alert); }
+        .total { 
+            font-size: 1.4rem; 
+            font-weight: 700; 
+            color: var(--green-primary); 
+            margin-top: 20px; 
+            border-top: 3px solid var(--green-primary); 
+            padding-top: 15px; 
+            text-align: center;
+        }
+        .missing-data-box {
+            background-color: #ffe0e6;
+            color: var(--red-alert);
+            border: 2px solid var(--red-alert);
+            text-align: center;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="navbar-logo">
+            <div>
+               <div class="title">🌱സ്മാർട്ട് ഫാം അസിസ്റ്റന്റ്</div>
+                <div class="tagline">IOT ഉപയോഗിച്ചുള്ള കൃഷി മാർഗ്ഗനിർദ്ദേശ സംവിധാനം</div>
+            </div>
+        </div>
+        <div class="navbar-menu">
+         <a href="index4.html" >ഹോം</a>
+            <a href="farmdata4.html">ഫാം ഡാറ്റ</a>
+            <a href="results4.html"class="active">ഫലങ്ങൾ</a>
+            <a href="monitoring4.html">നിരീക്ഷണം</a>
+            <a href="profile4.html">പ്രൊഫൈൽ</a>
+            
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="result" class="result-box">
+            <h1>ശുപാർശകൾ പ്രോസസ്സ് ചെയ്യുന്നു...</h1>
+            <p style="text-align: center;">ഈ സന്ദേശം തുടരുകയാണെങ്കിൽ, ദയവായി നിങ്ങളുടെ ലോഗിൻ നില പരിശോധിക്കുക.</p>
+        </div>
+    </div>
+
+<script>
+// --- Configuration ---
+const USER_DATA_KEY = "currentUser";
+const FORM_DATA_PREFIX = "farmData_";
+const PH_OPTIMAL = 6.5;
+
+// --- Global Functions ---
+function logoutUser() {
+    localStorage.removeItem(USER_DATA_KEY);
+    alert('You have been successfully logged out.');
+    window.location.href = "login4.html";
+}
+
+// --- CORE SCRIPT: SECURITY CHECK and DATA LOADING ---
+document.addEventListener('DOMContentLoaded', function() {
+    const currentUsername = localStorage.getItem(USER_DATA_KEY);
+    const resultDiv = document.getElementById('result');
+
+    // 1. SECURITY CHECK: Ensure user is logged in
+    if (!currentUsername) {
+        alert('You must be logged in to view the results.');
+        window.location.href = "login4.html"; 
+        return; // Stop execution
+    }
+
+    // 2. DATA LOADING (Use the user-specific key)
+    const farmDataString = localStorage.getItem(FORM_DATA_PREFIX + currentUsername);
+
+    if (!farmDataString) {
+        resultDiv.innerHTML = `
+            <div class="result-box missing-data-box">
+                <h2>⚠️ ഡാറ്റ ലഭ്യമല്ല</h2>
+                <p>ഉപയോക്താവ് <span style="font-weight:700;">${currentUsername}</span>-ന് വേണ്ടി കൃഷിഭൂമി ഡാറ്റയൊന്നും കണ്ടെത്തിയില്ല. നിങ്ങളുടെ വിശദാംശങ്ങൾ നൽകാൻ ദയവായി 'കൃഷിഭൂമി ഡാറ്റ' ടാബിലേക്ക് പോകുക.</p>
+                <p style="margin-top:10px;"><a href="farmdata.html" style="color:var(--red-alert); text-decoration: underline;">കൃഷിഭൂമി ഡാറ്റ പേജിലേക്ക് പോകുക</a></p>
+            </div>
+        `;
+        return;
+    }
+
+    // 3. Parse Data
+    const data = JSON.parse(farmDataString);
+
+    // 4. Generate Soil Recommendation (Example Logic)
+    let soilRecommendation = '';
+    if (data.ph < PH_OPTIMAL - 0.5) {
+        soilRecommendation = `മണ്ണിലെ pH കുറവാണ് (${data.ph}). ശുപാർശ: മികച്ച പോഷക ലഭ്യതയ്ക്കായി pH വർദ്ധിപ്പിക്കാൻ കുമ്മായം (Lime) പ്രയോഗിക്കുക.`;
+    } else if (data.ph > PH_OPTIMAL + 0.5) {
+        soilRecommendation = `മണ്ണിലെ pH കൂടുതലാണ് (${data.ph}). ശുപാർശ: pH കുറയ്ക്കുന്നതിനും മണ്ണിന്റെ ഘടന മെച്ചപ്പെടുത്തുന്നതിനും സൾഫറോ ജിപ്‌സവും പ്രയോഗിക്കുക.`;
+    } else {
+        soilRecommendation = `മണ്ണിലെ pH (${data.ph}) ഒപ്റ്റിമൽ ആണ്. പോഷക സന്തുലിതാവസ്ഥ നിലനിർത്തുന്നതിൽ ശ്രദ്ധ കേന്ദ്രീകരിക്കുക.`;
+    }
+    
+    // 5. Generate NPK Recommendation (Example Logic)
+    let NPKRecommendation = [];
+    if (data.N < 100) NPKRecommendation.push(`നൈട്രജൻ (N): കുറവാണ്. ഉയർന്ന നൈട്രജൻ വളങ്ങളായ യൂറിയ പ്രയോഗിക്കുക.`);
+    if (data.P < 80) NPKRecommendation.push(`ഫോസ്ഫറസ് (P): കുറവാണ്. DAP അല്ലെങ്കിൽ സൂപ്പർഫോസ്ഫേറ്റ് പ്രയോഗിക്കുക.`);
+    if (data.K < 60) NPKRecommendation.push(`പൊട്ടാസ്യം (K): കുറവാണ്. മ്യൂറിയേറ്റ് ഓഫ് പൊട്ടാഷ് (MOP) പ്രയോഗിക്കുക.`);
+    
+    if (NPKRecommendation.length === 0) {
+        NPKRecommendation.push("NPK നിലകൾ: എല്ലാ നിലകളും തൃപ്തികരമാണ്. നിരീക്ഷണം തുടരുക.");
+    }
+
+
+    // 6. Display Results
+    resultDiv.innerHTML = `
+        <h2>✅ നിങ്ങളുടെ സ്മാർട്ട് ഫാം ശുപാർശകൾ</h2>
+        <p style="text-align: center;"><span style="font-weight: 600;">${currentUsername}</span>-നായുള്ള വിശകലനം | ഡാറ്റ ${data.timestamp ? new Date(data.timestamp).toLocaleString() : 'N/A'} മുതൽ</p>
+
+        <div class="section">
+            <h3>🚜 ഇൻപുട്ട് സംഗ്രഹം</h3>
+            <div class="info-pair"><span class="label">സ്ഥലം:</span><span class="value">${data.location}</span></div>
+            <div class="info-pair"><span class="label">മുൻപത്തെ വിള:</span><span class="value">${data.prevCrop}</span></div>
+            <div class="info-pair"><span class="label">മണ്ണിന്റെ തരം:</span><span class="value">${data.soilType}</span></div>
+            <div class="info-pair"><span class="label">ശരാശരി താപനില:</span><span class="value">${data.temp}°C</span></div>
+        </div>
+
+        <div class="section">
+            <h3>🧪 മണ്ണും പോഷക അളവുകളും</h3>
+            <div class="info-pair"><span class="label">pH ലെവൽ:</span><span class="value">${data.ph.toFixed(1)} (ഒപ്റ്റിമൽ: ${PH_OPTIMAL})</span></div>
+            <div class="info-pair"><span class="label">മണ്ണിലെ ഈർപ്പം:</span><span class="value">${data.moisture}%</span></div>
+            <div class="info-pair"><span class="label">നൈട്രജൻ (N):</span><span class="value">${data.N} kg/ha</span></div>
+            <div class="info-pair"><span class="label">ഫോസ്ഫറസ് (P):</span><span class="value">${data.P} kg/ha</span></div>
+            <div class="info-pair"><span class="label">പൊട്ടാസ്യം (K):</span><span class="value">${data.K} kg/ha</span></div>
+        </div>
+        
+        <div class="section">
+            <h3>💡 വിശദമായ ശുപാർശകൾ</h3>
+            <h4>മണ്ണ് ചികിത്സ:</h4>
+            <p>${soilRecommendation}</p>
+            
+            <h4 style="margin-top:15px;">പോഷക ക്രമീകരണം:</h4>
+            <ul style="list-style-type: none; padding-left: 0;">
+                ${NPKRecommendation.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+        </div>
+        
+        <div class="section cost-section">
+            <h3>💰 കണക്കാക്കിയ ചെലവ് വിവരങ്ങൾ (₹)</h3>
+            <div class="info-pair"><span class="label">വളത്തിന്റെ ചെലവ്:</span><span class="value">₹${data.fertilizerCost.toFixed(2)}</span></div>
+            <div class="info-pair"><span class="label">ജലസേചന ചെലവ്:</span><span class="value">₹${data.irrigationCost.toFixed(2)}</span></div>
+            <div class="info-pair"><span class="label">മണ്ണ് ചികിത്സാ ചെലവ്:</span><span class="value">₹${data.soilTreatmentCost.toFixed(2)}</span></div>
+            <div class="info-pair"><span class="label">IoT പരിപാലന ചെലവ്:</span><span class="value">₹${data.IoTCost.toFixed(2)}</span></div>
+        </div>
+
+        <div class="total">
+            ✨ പ്രതീക്ഷിക്കുന്ന ആകെ കൃഷിഭൂമി ചെലവ്: ₹${data.totalCost.toFixed(2)}
+        </div>
+    `;
+});
+</script>
+</body>
+</html>

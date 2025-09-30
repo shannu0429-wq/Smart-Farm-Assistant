@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ஸ்மார்ட் ஃபார்ம் அசிஸ்டன்ட் - முடிவுகள்</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green-primary: #4CAF50;
+            --green-light: #e8f5e9;
+            --gray-text: #555;
+            --background-color: #f0f4f7;
+            --dark-green-bg: #4c8a5a;
+            --red-alert: #dc3545;
+            --yellow-warn: #ffc107;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); line-height: 1.6; color: #333; }
+        
+        /* Navigation Bar */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 50px; background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .navbar-logo .title { font-size: 1.5rem; font-weight: 600; }
+        .navbar-logo .tagline { font-size: 0.8rem; color: var(--gray-text); }
+        .navbar-menu { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+        .navbar-menu a { text-decoration: none; color: #555; font-weight: 500; padding: 8px 15px; border-radius: 20px; transition: background-color 0.3s, color 0.3s; }
+        .navbar-menu a.active { background-color: var(--green-primary); color: white; }
+
+        /* Result Box */
+        .container { display: flex; justify-content: center; align-items: flex-start; padding: 40px 20px; }
+        .result-box { background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 800px; width: 100%; line-height: 1.8; }
+        
+        h2 { color: var(--green-primary); margin-bottom: 15px; border-bottom: 2px solid var(--green-light); padding-bottom: 10px; }
+        h3 { color: var(--dark-green-bg); margin-top: 20px; margin-bottom: 10px; }
+        
+        .section { margin-bottom: 25px; padding: 10px 0; }
+        
+        .info-pair { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed #eee; }
+        .info-pair:last-of-type { border-bottom: none; }
+        
+        .info-pair .label { font-weight: 500; color: #333; }
+        .info-pair .value { font-weight: 600; color: var(--gray-text); }
+        
+        /* Cost Specific Styles */
+        .cost-section .info-pair .value { color: var(--red-alert); }
+        .total { 
+            font-size: 1.4rem; 
+            font-weight: 700; 
+            color: var(--green-primary); 
+            margin-top: 20px; 
+            border-top: 3px solid var(--green-primary); 
+            padding-top: 15px; 
+            text-align: center;
+        }
+        .missing-data-box {
+            background-color: #ffe0e6;
+            color: var(--red-alert);
+            border: 2px solid var(--red-alert);
+            text-align: center;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="navbar-logo">
+            <div>
+              <div class="title">🌱ஸ்மார்ட் ஃபார்ம் அசிஸ்டன்ட்</div>
+                <div class="tagline">IOT பயன்படுத்தி விவசாய வழிகாட்டி அமைப்பு</div>
+            </div>
+        </div>
+        <div class="navbar-menu">
+               <a href="index5.html">முகப்பு</a>
+            <a href="farmdata5.html" >பண்ணை தரவு</a> 
+            <a href="results5.html"class="active">முடிவுகள்</a>
+            <a href="monitoring5.html">கண்காணிப்பு</a>
+            <a href="profile5.html">சுயவிவரம்</a>
+            
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="result" class="result-box">
+            <h1>பரிந்துரைகள் செயலாக்கப்படுகின்றன...</h1>
+            <p style="text-align: center;">இந்த செய்தி தொடர்ந்தால், உங்கள் உள்நுழைவு நிலையை சரிபார்க்கவும்.</p>
+        </div>
+    </div>
+
+<script>
+// --- Configuration ---
+const USER_DATA_KEY = "currentUser";
+const FORM_DATA_PREFIX = "farmData_";
+const PH_OPTIMAL = 6.5;
+
+// --- Global Functions ---
+function logoutUser() {
+    localStorage.removeItem(USER_DATA_KEY);
+    alert('You have been successfully logged out.');
+    window.location.href = "login5.html";
+}
+
+// --- CORE SCRIPT: SECURITY CHECK and DATA LOADING ---
+document.addEventListener('DOMContentLoaded', function() {
+    const currentUsername = localStorage.getItem(USER_DATA_KEY);
+    const resultDiv = document.getElementById('result');
+
+    // 1. SECURITY CHECK: Ensure user is logged in
+    if (!currentUsername) {
+        alert('You must be logged in to view the results.');
+        window.location.href = "login5.html"; 
+        return; // Stop execution
+    }
+
+    // 2. DATA LOADING (Use the user-specific key)
+    const farmDataString = localStorage.getItem(FORM_DATA_PREFIX + currentUsername);
+
+    if (!farmDataString) {
+        resultDiv.innerHTML = `
+            <div class="result-box missing-data-box">
+                <h2>⚠️ தரவு இல்லை</h2>
+                <p>பயனர் <span style="font-weight:700;">${currentUsername}</span>-க்கு எந்தப் பண்ணை தரவும் கிடைக்கவில்லை. உங்கள் விவரங்களை உள்ளிட பண்ணை தரவு தாவலுக்குச் செல்லவும்.</p>
+                <p style="margin-top:10px;"><a href="farmdata.html" style="color:var(--red-alert); text-decoration: underline;">பண்ணை தரவு பக்கத்திற்குச் செல்லவும்</a></p>
+            </div>
+        `;
+        return;
+    }
+
+    // 3. Parse Data
+    const data = JSON.parse(farmDataString);
+
+    // 4. Generate Soil Recommendation (Example Logic)
+    let soilRecommendation = '';
+    if (data.ph < PH_OPTIMAL - 0.5) {
+        soilRecommendation = `மண்ணின் pH குறைவாக உள்ளது (${data.ph}). பரிந்துரை: சிறந்த ஊட்டச்சத்து கிடைப்பதற்காக pH-ஐ அதிகரிக்க சுண்ணாம்பு (Lime) இடவும்.`;
+    } else if (data.ph > PH_OPTIMAL + 0.5) {
+        soilRecommendation = `மண்ணின் pH அதிகமாக உள்ளது (${data.ph}). பரிந்துரை: pH-ஐ குறைக்கவும், மண் அமைப்பை மேம்படுத்தவும் கந்தகம் (Sulfur) அல்லது ஜிப்சம் இடவும்.`;
+    } else {
+        soilRecommendation = `மண்ணின் pH (${data.ph}) உகந்ததாக உள்ளது. ஊட்டச்சத்து சமநிலையை பராமரிப்பதில் கவனம் செலுத்தவும்.`;
+    }
+    
+    // 5. Generate NPK Recommendation (Example Logic)
+    let NPKRecommendation = [];
+    if (data.N < 100) NPKRecommendation.push(`நைட்ரஜன் (N): குறைவாக உள்ளது. யூரியா போன்ற அதிக-N உரத்தைப் பயன்படுத்தவும்.`);
+    if (data.P < 80) NPKRecommendation.push(`பாஸ்பரஸ் (P): குறைவாக உள்ளது. DAP அல்லது சூப்பர் பாஸ்பேட் பயன்படுத்தவும்.`);
+    if (data.K < 60) NPKRecommendation.push(`பொட்டாசியம் (K): குறைவாக உள்ளது. பொட்டாஷ் மியூரியேட் (MOP) பயன்படுத்தவும்.`);
+    
+    if (NPKRecommendation.length === 0) {
+        NPKRecommendation.push("NPK நிலைகள்: அனைத்து நிலைகளும் தற்போது திருப்திகரமாக உள்ளன. கண்காணிப்பை தொடரவும்.");
+    }
+
+
+    // 6. Display Results
+    resultDiv.innerHTML = `
+        <h2>✅ உங்கள் ஸ்மார்ட் பண்ணை பரிந்துரைகள்</h2>
+        <p style="text-align: center;"><span style="font-weight: 600;">${currentUsername}</span>க்கான பகுப்பாய்வு | தரவு ${data.timestamp ? new Date(data.timestamp).toLocaleString() : 'N/A'} இலிருந்து</p>
+
+        <div class="section">
+            <h3>🚜 உள்ளீட்டுச் சுருக்கம்</h3>
+            <div class="info-pair"><span class="label">இடம்:</span><span class="value">${data.location}</span></div>
+            <div class="info-pair"><span class="label">முந்தைய பயிர்:</span><span class="value">${data.prevCrop}</span></div>
+            <div class="info-pair"><span class="label">மண் வகை:</span><span class="value">${data.soilType}</span></div>
+            <div class="info-pair"><span class="label">சராசரி வெப்பநிலை:</span><span class="value">${data.temp}°C</span></div>
+        </div>
+
+        <div class="section">
+            <h3>🧪 மண் மற்றும் ஊட்டச்சத்து அளவுகள்</h3>
+            <div class="info-pair"><span class="label">pH நிலை:</span><span class="value">${data.ph.toFixed(1)} (உகந்தது: ${PH_OPTIMAL})</span></div>
+            <div class="info-pair"><span class="label">மண் ஈரம்:</span><span class="value">${data.moisture}%</span></div>
+            <div class="info-pair"><span class="label">நைட்ரஜன் (N):</span><span class="value">${data.N} kg/ha</span></div>
+            <div class="info-pair"><span class="label">பாஸ்பரஸ் (P):</span><span class="value">${data.P} kg/ha</span></div>
+            <div class="info-pair"><span class="label">பொட்டாசியம் (K):</span><span class="value">${data.K} kg/ha</span></div>
+        </div>
+        
+        <div class="section">
+            <h3>💡 விரிவான பரிந்துரைகள்</h3>
+            <h4>மண் சிகிச்சை:</h4>
+            <p>${soilRecommendation}</p>
+            
+            <h4 style="margin-top:15px;">ஊட்டச்சத்து சரிசெய்தல்:</h4>
+            <ul style="list-style-type: none; padding-left: 0;">
+                ${NPKRecommendation.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+        </div>
+        
+        <div class="section cost-section">
+            <h3>💰 மதிப்பிடப்பட்ட செலவு விவரம் (₹)</h3>
+            <div class="info-pair"><span class="label">உரச் செலவு:</span><span class="value">₹${data.fertilizerCost.toFixed(2)}</span></div>
+            <div class="info-pair"><span class="label">நீர்ப்பாசனச் செலவு:</span><span class="value">₹${data.irrigationCost.toFixed(2)}</span></div>
+            <div class="info-pair"><span class="label">மண் சிகிச்சைச் செலவு:</span><span class="value">₹${data.soilTreatmentCost.toFixed(2)}</span></div>
+            <div class="info-pair"><span class="label">IoT பராமரிப்புச் செலவு:</span><span class="value">₹${data.IoTCost.toFixed(2)}</span></div>
+        </div>
+
+        <div class="total">
+            ✨ கணிக்கப்பட்ட மொத்த பண்ணைச் செலவு: ₹${data.totalCost.toFixed(2)}
+        </div>
+    `;
+});
+</script>
+</body>
+</html>

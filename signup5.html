@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ஸ்மார்ட் ஃபார்ம் அசிஸ்டென்ட் - பதிவு</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --green-primary: #4CAF50; --border-color: #ddd; --background-color: #f0f4f7; --dark-green-bg: #4c8a5a; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); display: flex; flex-direction: column; min-height: 100vh; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 50px; background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .navbar-logo .title { font-size: 1.5rem; font-weight: 600; }
+        .navbar-logo .tagline { font-size: 0.8rem; color: #555; }
+        .auth-container { flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+        .auth-form-box { background-color: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 450px; width: 100%; }
+        .auth-form-box h1 { text-align: center; color: var(--green-primary); margin-bottom: 25px; font-size: 2rem; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 500; margin-bottom: 8px; color: #333; }
+        .form-group input:not([type="file"]), .form-group textarea { 
+            width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem;
+        }
+        .profile-photo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px; 
+        }
+        .profile-photo-container input[type="file"] {
+            flex-grow: 1; 
+            padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem;
+            background-color: #fff;
+        }
+        /* CSS for the circular photo preview */
+        #photo-preview {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%; 
+            object-fit: cover; 
+            border: 3px solid var(--green-primary);
+            background-color: #e0e0e0; 
+            display: block;
+        }
+        /* Default image styling when no image is loaded (placeholder icon) */
+        #photo-preview:not([src]) {
+            content: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23888" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>');
+            padding: 23px; 
+        }
+        .submit-button { margin-top: 30px; }
+        .submit-button button { width: 100%; padding: 12px 30px; background-color: var(--green-primary); color: white; border: none; border-radius: 25px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: background-color 0.3s; }
+        .submit-button button:hover { background-color: var(--dark-green-bg); }
+        .form-footer { text-align: center; margin-top: 20px; font-size: 0.9rem; }
+        .form-footer a { color: var(--green-primary); text-decoration: none; font-weight: 600; }
+        .navbar-menu { display: flex; align-items: center; gap: 20px; }
+        .navbar-menu a { text-decoration: none; color: #555; font-weight: 500; padding: 8px 15px; border-radius: 20px; transition: background-color 0.3s, color 0.3s; }
+        .navbar-menu a.active { background-color: var(--green-primary); color: white; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-logo">
+            <div>
+                <div class="title">🌱ஸ்மார்ட் ஃபார்ம் அசிஸ்டன்ட்</div>
+                <div class="tagline">IOT பயன்படுத்தி விவசாய வழிகாட்டி அமைப்பு</div>
+            </div>
+        </div>
+        <div class="navbar-menu">
+            <a href="index5.html">முகப்பு</a>
+            <a href="farmdata5.html">பண்ணை தரவு</a>
+            <a href="results5.html">முடிவுகள்</a>
+            <a href="monitoring5.html">கண்காணிப்பு</a>
+            
+            <a href="signup5.html" class="active">பதிவு</a>
+            <a href="profile5.html">சுயவிவரம்</a>
+
+              
+        </div>
+    </div>
+    
+    <div class="auth-container">
+        <div class="auth-form-box">
+            <h1>உங்கள் கணக்கை உருவாக்கவும்</h1>
+            
+            <form id="signup-form">
+                
+                <div class="form-group">
+                    <label for="profilePhotoFile">சுயவிவரப் படம் (விரும்பினால்)</label>
+                    <div class="profile-photo-container">
+                        <img id="photo-preview" src="" alt="புகைப்பட முன்னோட்டம்" title="சுயவிவரப் பட முன்னோட்டம்">
+                        <input type="file" id="profilePhotoFile" accept="image/*"> 
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fullName">முழுப் பெயர்</label>
+                    <input type="text" id="fullName" placeholder="உங்கள் முழுப் பெயரை உள்ளிடவும்" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">மின்னஞ்சல் முகவரி</label>
+                    <input type="email" id="email" placeholder="உங்கள் மின்னஞ்சல் முகவரியை உள்ளிடவும்" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="mobile">மொபைல் எண்</label>
+                    <input type="tel" id="mobile" placeholder="உங்கள் 10 இலக்க மொபைல் எண்ணை உள்ளிடவும்" required pattern="[0-9]{10}">
+                </div>
+
+                <div class="form-group">
+                    <label for="location">இருப்பிடம் (விரும்பினால்)</label>
+                    <input type="text" id="location" placeholder="எ.கா: நகரம், மாநிலம், அல்லது பண்ணை பெயர்">
+                </div>
+                
+                <div class="form-group">
+                    <label for="username">பயனர்பெயர்</label>
+                    <input type="text" id="username" placeholder="ஒரு தனிப்பட்ட பயனர்பெயரைத் தேர்ந்தெடுக்கவும் (எண்கள் மட்டும்)" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">கடவுச்சொல்</label>
+                    <input type="password" id="password" placeholder="ஒரு கடவுச்சொல்லை உருவாக்கவும்" required>
+                </div>
+                
+                <div class="submit-button">
+                    <button type="submit">பதிவு செய்யவும்</button>
+                </div>
+            </form>
+            
+            <p class="form-footer">
+                ஏற்கனவே ஒரு கணக்கு உள்ளதா? <a href="login5.html">உள்நுழைய</a>
+            </p>
+        </div>
+    </div>
+
+<script>
+const MAX_FILE_SIZE = 2097152; // 2MB
+
+// Function to handle the immediate preview of the selected image
+document.getElementById('profilePhotoFile').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('photo-preview');
+    
+    if (file) {
+        if (file.size > MAX_FILE_SIZE) {
+            alert('தேர்ந்தெடுக்கப்பட்ட படம் மிகப் பெரியது. 2MB-க்குக் குறைவான கோப்பைத் தேர்ந்தெடுக்கவும்.');
+            preview.removeAttribute('src'); 
+            event.target.value = null; 
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result; 
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.removeAttribute('src'); 
+    }
+});
+
+// Function to convert file to Base64 string (used in submit)
+function getBase64(file) {
+    return new Promise((resolve, reject) => {
+        if (!file || file.size > MAX_FILE_SIZE) {
+            reject('கோப்பு செல்லாதது அல்லது மிகப் பெரியது (அதிகபட்சம் 2MB).');
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+    });
+}
+
+
+document.getElementById('signup-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    const fullName = document.getElementById('fullName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const mobile = document.getElementById('mobile').value.trim();
+    const location = document.getElementById('location').value.trim();
+    const photoFile = document.getElementById('profilePhotoFile').files[0];
+
+    if (username.length < 3 || password.length < 6) {
+        alert('பயனர்பெயர் குறைந்தபட்சம் 3 எழுத்துகளையும் கடவுச்சொல் குறைந்தபட்சம் 6 எழுத்துகளையும் கொண்டிருக்க வேண்டும்.');
+        return;
+    }
+
+    const ALL_USERS_KEY = 'users';
+    const users = JSON.parse(localStorage.getItem(ALL_USERS_KEY) || '{}');
+
+    if (users[username]) {
+        alert(`பயனர்பெயர் '${username}' ஏற்கனவே உள்ளது. வேறொன்றைத் தேர்ந்தெடுக்கவும்.`);
+        return;
+    }
+
+    let profilePhotoBase64 = '';
+    
+    // Convert the file to a Base64 string if a file was selected
+    if (photoFile) {
+        try {
+            profilePhotoBase64 = await getBase64(photoFile);
+        } catch (error) {
+            console.error('கோப்பைப் படிப்பதில் பிழை:', error);
+            alert(`புகைப்படக் கோப்பைப் படிக்கும்போது பிழை ஏற்பட்டது: ${error}. தயவுசெய்து மீண்டும் முயற்சிக்கவும்.`);
+            return;
+        }
+    }
+
+    // Save the new user data
+    users[username] = { 
+        username: username, 
+        password: password, // In a real app, this should be hashed!
+        fullName: fullName, 
+        email: email,
+        mobile: mobile,
+        location: location,
+        profilePhotoBase64: profilePhotoBase64 
+    };
+    
+    try {
+        localStorage.setItem(ALL_USERS_KEY, JSON.stringify(users));
+
+        alert(`${username} க்கான பதிவு வெற்றிகரமாக முடிந்தது! தயவுசெய்து உள்நுழையவும்.`);
+        // Assuming you have a login.html file
+        window.location.href = "login5.html"; 
+
+    } catch (e) {
+        if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+            alert("பிழை: சேமிப்பக வரம்பை அடைந்தது. உங்கள் உலாவியின் உள்ளூர் சேமிப்பகத்தை அழிக்கவும் அல்லது சிறிய சுயவிவரப் படத்தைப் பயன்படுத்தவும்.");
+        } else {
+            alert("பதிவின்போது அறியப்படாத பிழை ஏற்பட்டது.");
+        }
+    }
+});
+</script>
+</body>
+</html>

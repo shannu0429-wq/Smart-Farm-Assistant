@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ಸ್ಮಾರ್ಟ್ ಫಾರ್ಮ್ ಸಹಾಯಕ - ಪ್ರೊಫೈಲ್</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green-primary: #4CAF50;
+            --green-light: #e8f5e9;
+            --gray-text: #555;
+            --border-color: #ddd;
+            --background-color: #f0f4f7;
+            --success-dot: #28a745;
+            --dark-green-bg: #4c8a5a;
+            --premium-color: #ffc107; 
+            --delete-red: #8b0000; 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; line-height: 1.6; color: #333; background-color: var(--background-color); }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 50px; background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .navbar-logo .title { font-size: 1.5rem; font-weight: 600; }
+        .navbar-logo .tagline { font-size: 0.8rem; color: var(--gray-text); }
+        .navbar-menu { display: flex; align-items: center; gap: 20px; }
+        .navbar-menu a { text-decoration: none; color: #555; font-weight: 500; padding: 8px 15px; border-radius: 20px; transition: background-color 0.3s, color 0.3s; }
+        .navbar-menu a:hover, .navbar-menu a.active { background-color: var(--green-primary); color: white; }
+
+        /* --- Profile Specific Styles --- */
+        .main-container { padding: 40px 20px; max-width: 800px; margin: 20px auto; background-color: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .profile-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid var(--green-light); padding-bottom: 20px; }
+        .profile-header h1 { color: var(--green-primary); font-size: 2.5rem; }
+
+        /* Style for the Profile Photo Display in the main view */
+        #main-profile-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--green-primary);
+            margin-bottom: 15px;
+            background-color: #e0e0e0;
+            display: inline-block;
+        }
+        /* Fallback placeholder for main photo when no src is set */
+        #main-profile-photo:not([src]) {
+            content: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23888" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>');
+            padding: 23px;
+        }
+
+        .profile-photo-container-main { text-align: center; }
+        .profile-info { display: flex; flex-direction: column; gap: 15px; padding: 0 40px; }
+        .info-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+        .info-item label { font-weight: 600; color: #333; flex-basis: 40%; }
+        .info-item span { flex-basis: 60%; text-align: right; color: var(--gray-text); }
+        .action-buttons { display: flex; justify-content: center; gap: 20px; margin-top: 40px; }
+
+        /* General Button Styling */
+        .profile-button { padding: 12px 30px; border: none; border-radius: 25px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background-color 0.3s; }
+        .update-button { background-color: var(--dark-green-bg); color: white; }
+        .update-button:hover { background-color: #3b6b45; }
+        .logout-button { background-color: #dc3545; color: white; }
+        .logout-button:hover { background-color: #c82333; }
+        .upgrade-button { background-color: var(--premium-color); color: #333; font-weight: 700; }
+        .upgrade-button:hover { background-color: #ffdb58; }
+
+        /* Delete Button Style */
+        .security-actions { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px dashed var(--border-color); }
+        .delete-button { padding: 8px 15px; background-color: white; color: var(--delete-red); border: 2px solid var(--delete-red); border-radius: 25px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background-color 0.3s, color 0.3s; margin-top: 15px; }
+        .delete-button:hover { background-color: var(--delete-red); color: white; }
+
+        /* --- Modal/Popup Styles --- */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); padding-top: 60px; }
+        .modal-content { background-color: #fefefe; margin: 5% auto; padding: 30px; border-radius: 10px; width: 90%; max-width: 500px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .modal-content h2 { color: var(--green-primary); margin-bottom: 20px; text-align: center; }
+        .close-btn { color: #aaa; float: right; font-size: 28px; font-weight: bold; }
+        .close-btn:hover, .close-btn:focus { color: #000; text-decoration: none; cursor: pointer; }
+        .form-group-modal { margin-bottom: 15px; }
+        .form-group-modal label { display: block; font-weight: 500; margin-bottom: 5px; color: #333; }
+        .form-group-modal input, .form-group-modal button.submit-btn { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; }
+        button.submit-btn { background-color: var(--green-primary); color: white; font-weight: 600; margin-top: 15px; cursor: pointer; transition: background-color 0.3s; }
+        button.submit-btn:hover { background-color: var(--dark-green-bg); }
+        .photo-edit-container { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        #modal-photo-preview { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid var(--green-primary); background-color: #e0e0e0; display: block; }
+        #modal-photo-preview:not([src]) {
+            content: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23888" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>');
+            padding: 23px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-logo">
+            <div>
+                  <div class="title">🌱ಸ್ಮಾರ್ಟ್ ಫಾರ್ಮ್ ಅಸಿಸ್ಟೆಂಟ್</div>
+                <div class="tagline">IOT ಬಳಸಿಕೊಂಡು ಕೃಷಿ ಮಾರ್ಗದರ್ಶನ ವ್ಯವಸ್ಥೆ</div>
+            </div>
+        </div>
+        <div class="navbar-menu">
+            <a href="index3.html">ಹೋಮ್</a>
+            <a href="farmdata3.html">ಫಾರ್ಮ್ ಡೇಟಾ</a>
+            <a href="results3.html">ಫಲಿತಾಂಶಗಳು</a>
+            <a href="monitoring3.html">ಮೇಲ್ವಿಚಾರಣೆ</a>
+            <a href="profile3.html" class="active">ಪ್ರೊಫೈಲ್</a>
+
+
+      
+        </div>
+    </div>
+    
+    <div class="main-container">
+        <div class="profile-header">
+            <div class="profile-photo-container-main">
+                <img id="main-profile-photo" src="" alt="Profile Photo">
+            </div>
+            <h1>ನಿಮ್ಮ ಸ್ಮಾರ್ಟ್ ಫಾರ್ಮ್ ಪ್ರೊಫೈಲ್</h1>
+            <p>ಸ್ವಾಗತ, <span id="welcome-username">Loading...</span>!</p>
+        </div>
+        
+        <div class="profile-info">
+            <div class="info-item">
+                <label>ಪೂರ್ಣ ಹೆಸರು:</label>
+                <span id="display-fullName">N/A</span>
+            </div>
+            <div class="info-item">
+                <label>ಬಳಕೆದಾರ ಹೆಸರು:</label>
+                <span id="display-username">N/A</span>
+            </div>
+            <div class="info-item">
+                <label>ಇಮೇಲ್ ವಿಳಾಸ:</label>
+                <span id="display-email">N/A</span>
+            </div>
+            <div class="info-item">
+                <label>ಮೊಬೈಲ್ ಸಂಖ್ಯೆ:</label>
+                <span id="display-mobile">N/A</span>
+            </div>
+            <div class="info-item">
+                <label>ಸ್ಥಳ:</label>
+                <span id="display-location">N/A</span>
+            </div>
+            <div class="info-item">
+                <label>ಖಾತೆ ಸ್ಥಿತಿ:</label>
+                <span id="display-status">Loading...</span>
+            </div>
+            <div class="info-item">
+                <label>ಸಲ್ಲಿಕೆ ಮಿತಿ:</label>
+                <span id="display-submission-limit">N/A</span>
+            </div>
+            <div class="info-item">
+                <label>ಉಳಿದ ಸಲ್ಲಿಕೆಗಳು:</label>
+                <span id="display-submissions-remaining">0</span>
+            </div>
+            
+        </div>
+
+        <div class="action-buttons">
+            <button class="profile-button update-button" onclick="openUpdateModal()">ಪ್ರೊಫೈಲ್ ನವೀಕರಿಸಿ</button>
+            <button id="upgrade-btn" class="profile-button upgrade-button" onclick="upgradeToPremium()">
+                ಪ್ರೀಮಿಯಂಗೆ ನವೀಕರಿಸಿ
+            </button>
+            <button class="profile-button logout-button" onclick="logoutUser()">ಲಾಗ್ ಔಟ್</button>
+        </div>
+
+        <div class="security-actions">
+            <p>ಅಪಾಯಕಾರಿ ವಲಯ: ನಿಮ್ಮ ಖಾತೆ ಮತ್ತು ಎಲ್ಲಾ ಸಂಬಂಧಿತ ಡೇಟಾವನ್ನು ಶಾಶ್ವತವಾಗಿ ಅಳಿಸಿ.</p>
+            <button class="delete-button" onclick="deleteAccount()">ಖಾತೆ ಅಳಿಸಿ</button>
+        </div>
+    </div>
+
+    <div id="updateProfileModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeUpdateModal()">&times;</span>
+            <h2>ಪ್ರೊಫೈಲ್ ಮಾಹಿತಿಯನ್ನು ನವೀಕರಿಸಿ</h2>
+            
+            <form id="update-form">
+
+                <div class="form-group-modal">
+                    <label>ಪ್ರೊಫೈಲ್ ಫೋಟೋ (ಐಚ್ಛಿಕ)</label>
+                    <div class="photo-edit-container">
+                        <img id="modal-photo-preview" src="" alt="Photo Preview">
+                        <input type="file" id="modal-profilePhotoFile" accept="image/*" onchange="previewModalPhoto(event)"> 
+                    </div>
+                </div>
+
+                <div class="form-group-modal">
+                    <label for="modal-fullName">ಪೂರ್ಣ ಹೆಸರು</label>
+                    <input type="text" id="modal-fullName" required>
+                </div>
+                
+                <div class="form-group-modal">
+                    <label for="modal-email">ಇಮೇಲ್ ವಿಳಾಸ</label>
+                    <input type="email" id="modal-email" required>
+                </div>
+
+                <div class="form-group-modal">
+                    <label for="modal-mobile">ಮೊಬೈಲ್ ಸಂಖ್ಯೆ</label>
+                    <input type="tel" id="modal-mobile" required pattern="[0-9]{10}">
+                </div>
+
+                <div class="form-group-modal">
+                    <label for="modal-location">ಸ್ಥಳ (ಐಚ್ಛಿಕ)</label>
+                    <input type="text" id="modal-location">
+                </div>
+                
+                <div class="form-group-modal">
+                    <label for="modal-username">ಬಳಕೆದಾರ ಹೆಸರು (ಬದಲಾಯಿಸಲಾಗದು)</label>
+                    <input type="text" id="modal-username" disabled>
+                </div>
+                
+                <button type="submit" class="submit-btn">ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಿ</button>
+            </form>
+        </div>
+    </div>
+
+<script>
+// --- JavaScript logic remains in English for functionality ---
+const MAX_FREE_SUBMISSIONS = 5; 
+const MAX_PREMIUM_SUBMISSIONS = 30; 
+const USER_DATA_KEY = 'currentUser';
+const ALL_USERS_KEY = 'users';
+const MAX_FILE_SIZE = 2097152; // 2MB
+const PREMIUM_STATUS_KEY = "isPremium_"; 
+const SUBMISSION_COUNT_PREFIX = "farmSubmissionCount_";
+
+let currentUserData = null; 
+
+function getBase64(file) {
+    return new Promise((resolve, reject) => {
+        if (!file || file.size > MAX_FILE_SIZE) {
+            reject('File invalid or too large (max 2MB).');
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject('FileReader failed to read the file.');
+        reader.readAsDataURL(file);
+    });
+}
+
+function previewModalPhoto(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('modal-photo-preview');
+    
+    if (file) {
+        if (file.size > MAX_FILE_SIZE) {
+            alert('The selected image is too large. Please select a file under 2MB.');
+            preview.removeAttribute('src'); 
+            event.target.value = null; 
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(e) { preview.src = e.target.result; };
+        reader.readAsDataURL(file);
+    } else {
+        if (currentUserData && currentUserData.profilePhotoBase64) {
+             preview.src = currentUserData.profilePhotoBase64;
+        } else {
+            preview.removeAttribute('src');
+        }
+    }
+}
+
+function openUpdateModal() {
+    if (!currentUserData) return;
+    
+    document.getElementById('modal-fullName').value = currentUserData.fullName || '';
+    document.getElementById('modal-email').value = currentUserData.email || '';
+    document.getElementById('modal-mobile').value = currentUserData.mobile || '';
+    document.getElementById('modal-location').value = currentUserData.location || '';
+    document.getElementById('modal-username').value = currentUserData.username;
+    
+    const preview = document.getElementById('modal-photo-preview');
+    if (currentUserData.profilePhotoBase64) {
+        preview.src = currentUserData.profilePhotoBase64;
+    } else {
+        preview.removeAttribute('src'); 
+    }
+    
+    document.getElementById('modal-profilePhotoFile').value = ''; 
+    document.getElementById('updateProfileModal').style.display = "block";
+}
+
+function closeUpdateModal() {
+    document.getElementById('updateProfileModal').style.display = "none";
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById('updateProfileModal');
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+function loadProfileData() {
+    const currentUsername = localStorage.getItem(USER_DATA_KEY);
+    const users = JSON.parse(localStorage.getItem(ALL_USERS_KEY) || '{}');
+    const user = users[currentUsername];
+    
+    if (!currentUsername || !user) {
+        window.location.href = "login3.html";
+        return;
+    }
+    
+    currentUserData = user; 
+    
+    const isPremium = localStorage.getItem(PREMIUM_STATUS_KEY + currentUsername) === 'true';
+    const currentLimit = isPremium ? MAX_PREMIUM_SUBMISSIONS : MAX_FREE_SUBMISSIONS;
+    const submissionCount = parseInt(localStorage.getItem(SUBMISSION_COUNT_PREFIX + currentUsername)) || 0;
+    const remainingCount = Math.max(0, currentLimit - submissionCount);
+    
+    const statusSpan = document.getElementById('display-status');
+    const upgradeButton = document.getElementById('upgrade-btn');
+    statusSpan.classList.remove('free', 'premium');
+
+    if (isPremium) {
+        statusSpan.textContent = "ಪ್ರೀಮಿಯಂ ಶ್ರೇಣಿ 👑";
+        statusSpan.classList.add('premium');
+        upgradeButton.textContent = "✅ ಪ್ರೀಮಿಯಂ ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ";
+        upgradeButton.disabled = true; 
+        upgradeButton.style.opacity = 0.6;
+    } else {
+        statusSpan.textContent = "ಉಚಿತ ಶ್ರೇಣಿ";
+        statusSpan.classList.add('free');
+        upgradeButton.textContent = `ಪ್ರೀಮಿಯಂಗೆ ನವೀಕರಿಸಿ (${MAX_PREMIUM_SUBMISSIONS} ಸಲ್ಲಿಕೆಗಳು)`;
+        upgradeButton.disabled = false;
+        upgradeButton.style.opacity = 1;
+    }
+
+    document.getElementById('welcome-username').textContent = user.fullName || user.username;
+    document.getElementById('display-fullName').textContent = user.fullName || 'ಒದಗಿಸಲಾಗಿಲ್ಲ';
+    document.getElementById('display-username').textContent = user.username;
+    document.getElementById('display-email').textContent = user.email || 'ಒದಗಿಸಲಾಗಿಲ್ಲ';
+    document.getElementById('display-mobile').textContent = user.mobile || 'ಒದಗಿಸಲಾಗಿಲ್ಲ';
+    document.getElementById('display-location').textContent = user.location || 'ಒದಗಿಸಲಾಗಿಲ್ಲ'; 
+    document.getElementById('display-submission-limit').textContent = currentLimit;
+    document.getElementById('display-submissions-remaining').textContent = remainingCount;
+    
+    const mainPhoto = document.getElementById('main-profile-photo');
+    if (user.profilePhotoBase64) {
+        mainPhoto.src = user.profilePhotoBase64;
+    } else {
+        mainPhoto.removeAttribute('src');
+    }
+
+    const remainingSpan = document.getElementById('display-submissions-remaining');
+    remainingSpan.classList.remove('limit-ok', 'limit-low', 'limit-premium'); 
+    remainingSpan.classList.add(isPremium ? 'limit-premium' : (remainingCount <= 1 ? 'limit-low' : 'limit-ok'));
+}
+
+document.addEventListener('DOMContentLoaded', loadProfileData);
+
+
+document.getElementById('update-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    
+    const currentUsername = currentUserData.username;
+    const fullName = document.getElementById('modal-fullName').value.trim();
+    const email = document.getElementById('modal-email').value.trim();
+    const mobile = document.getElementById('modal-mobile').value.trim();
+    const location = document.getElementById('modal-location').value.trim();
+    const photoFile = document.getElementById('modal-profilePhotoFile').files[0];
+
+    const allUsers = JSON.parse(localStorage.getItem(ALL_USERS_KEY) || '{}');
+    
+    let newPhotoBase64 = currentUserData.profilePhotoBase64 || ''; 
+
+    try {
+        if (photoFile) {
+            newPhotoBase64 = await getBase64(photoFile);
+        } else if (currentUserData.profilePhotoBase64 && !document.getElementById('modal-photo-preview').getAttribute('src')) {
+            newPhotoBase64 = '';
+        }
+
+        const updatedUser = {
+            ...currentUserData, 
+            fullName: fullName,
+            email: email,
+            mobile: mobile,
+            location: location,
+            profilePhotoBase64: newPhotoBase64 
+        };
+
+        allUsers[currentUsername] = updatedUser;
+        localStorage.setItem(ALL_USERS_KEY, JSON.stringify(allUsers));
+        
+        currentUserData = updatedUser; 
+
+        alert('ಪ್ರೊಫೈಲ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ!');
+        closeUpdateModal();
+        
+        loadProfileData(); 
+        
+    } catch (error) {
+        console.error('Profile Update Failed:', error);
+        let errorMsg = 'ಪ್ರೊಫೈಲ್ ನವೀಕರಣ ವಿಫಲವಾಗಿದೆ. ದಯವಿಟ್ಟು ಎಲ್ಲಾ ಅಗತ್ಯ ಕ್ಷೇತ್ರಗಳನ್ನು ಭರ್ತಿ ಮಾಡಲಾಗಿದೆಯೆ ಎಂದು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.';
+        
+        if (typeof error === 'string' && error.includes('too large')) {
+            errorMsg = 'ನವೀಕರಣ ವಿಫಲವಾಗಿದೆ: ಇಮೇಜ್ ಫೈಲ್ ತುಂಬಾ ದೊಡ್ಡದಾಗಿದೆ (ಗರಿಷ್ಠ 2MB).';
+        } else if (error.name && (error.name === 'QuotaExceededError' || error.name === 'NS_ERROR_DOM_QUOTA_REACHED')) {
+            errorMsg = "ನವೀಕರಣ ವಿಫಲವಾಗಿದೆ: ಬ್ರೌಸರ್ ಸಂಗ್ರಹ ಮಿತಿಯನ್ನು ತಲುಪಿದೆ. ಚಿಕ್ಕ ಚಿತ್ರವನ್ನು ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ಸಂಗ್ರಹವನ್ನು ತೆರವುಗೊಳಿಸಿ.";
+        }
+        
+        alert(errorMsg);
+    }
+});
+
+
+function logoutUser() {
+    localStorage.removeItem(USER_DATA_KEY);
+    alert('ನೀವು ಯಶಸ್ವಿಯಾಗಿ ಲಾಗ್ ಔಟ್ ಆಗಿದ್ದೀರಿ.');
+    window.location.href = "login3.html";
+}
+
+function upgradeToPremium() {
+    window.location.href = "upgrade3.html"; 
+}
+
+function deleteAccount() {
+    const currentUsername = localStorage.getItem(USER_DATA_KEY);
+    if (!currentUsername) {
+        window.location.href = "login3.html";
+        return;
+    }
+
+    const confirmation = confirm(`ಎಚ್ಚರಿಕೆ: ನೀವು "${currentUsername}" ಗಾಗಿ ಖಾತೆಯನ್ನು ಶಾಶ್ವತವಾಗಿ ಅಳಿಸಲು ಬಯಸುವಿರಾ? ಈ ಕ್ರಿಯೆಯನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗುವುದಿಲ್ಲ.`);
+    
+    if (confirmation) {
+        const users = JSON.parse(localStorage.getItem(ALL_USERS_KEY) || '{}');
+        delete users[currentUsername];
+        localStorage.setItem(ALL_USERS_KEY, JSON.stringify(users));
+
+        localStorage.removeItem(PREMIUM_STATUS_KEY + currentUsername);
+        localStorage.removeItem(SUBMISSION_COUNT_PREFIX + currentUsername);
+        localStorage.removeItem(USER_DATA_KEY);
+        
+        alert(`"${currentUsername}" ಗಾಗಿ ಖಾತೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಅಳಿಸಲಾಗಿದೆ.`);
+        window.location.href = "login3.html";
+    }
+}
+</script>
+</body>
+</html>

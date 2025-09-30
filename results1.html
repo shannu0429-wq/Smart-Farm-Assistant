@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>స్మార్ట్ ఫామ్ అసిస్టెంట్ - ఫలితాలు</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green-primary: #4CAF50;
+            --green-light: #e8f5e9;
+            --gray-text: #555;
+            --background-color: #f0f4f7;
+            --dark-green-bg: #4c8a5a;
+            --red-alert: #dc3545;
+            --yellow-warn: #ffc107;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); line-height: 1.6; color: #333; }
+        
+        /* Navigation Bar */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 50px; background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .navbar-logo .title { font-size: 1.5rem; font-weight: 600; }
+        .navbar-logo .tagline { font-size: 0.8rem; color: var(--gray-text); }
+        .navbar-menu { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+        .navbar-menu a { text-decoration: none; color: #555; font-weight: 500; padding: 8px 15px; border-radius: 20px; transition: background-color 0.3s, color 0.3s; }
+        .navbar-menu a.active { background-color: var(--green-primary); color: white; }
+
+        /* Result Box */
+        .container { display: flex; justify-content: center; align-items: flex-start; padding: 40px 20px; }
+        .result-box { background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 800px; width: 100%; line-height: 1.8; }
+        
+        h2 { color: var(--green-primary); margin-bottom: 15px; border-bottom: 2px solid var(--green-light); padding-bottom: 10px; }
+        h3 { color: var(--dark-green-bg); margin-top: 20px; margin-bottom: 10px; }
+        
+        .section { margin-bottom: 25px; padding: 10px 0; }
+        
+        .info-pair { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed #eee; }
+        .info-pair:last-of-type { border-bottom: none; }
+        
+        .info-pair .label { font-weight: 500; color: #333; }
+        .info-pair .value { font-weight: 600; color: var(--gray-text); }
+        
+        /* Cost Specific Styles */
+        .cost-section .info-pair .value { color: var(--red-alert); }
+        .total { 
+            font-size: 1.4rem; 
+            font-weight: 700; 
+            color: var(--green-primary); 
+            margin-top: 20px; 
+            border-top: 3px solid var(--green-primary); 
+            padding-top: 15px; 
+            text-align: center;
+        }
+        .missing-data-box {
+            background-color: #ffe0e6;
+            color: var(--red-alert);
+            border: 2px solid var(--red-alert);
+            text-align: center;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="navbar-logo">
+            <div>
+                <div class="title">🌱స్మార్ట్ ఫార్మ్ అసిస్టెంట్</div>
+                <div class="tagline">IOT ఉపయోగించి వ్యవసాయ మార్గదర్శక వ్యవస్థ</div>
+            </div>
+        </div>
+        <div class="navbar-menu">
+            <a href="index1.html">హోమ్</a>
+            <a href="farmdata1.html">పొలం డేటా</a>
+            <a href="results1.html" class="active">ఫలితాలు</a>
+            <a href="monitoring1.html">పర్యవేక్షణ</a>
+            <a href="profile1.html">ప్రొఫైల్</a>
+            
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="result" class="result-box">
+            <h1>సిఫార్సులు ప్రాసెస్ అవుతున్నాయి...</h1>
+            <p style="text-align: center;">ఈ సందేశం కొనసాగితే, దయచేసి మీ లాగిన్ స్థితిని తనిఖీ చేయండి.</p>
+        </div>
+    </div>
+
+<script>
+// --- Configuration ---
+const USER_DATA_KEY = "currentUser";
+const FORM_DATA_PREFIX = "farmData_";
+const PH_OPTIMAL = 6.5;
+
+// --- Global Functions ---
+function logoutUser() {
+    localStorage.removeItem(USER_DATA_KEY);
+    alert('You have been successfully logged out.');
+    window.location.href = "login1.html";
+}
+
+// --- CORE SCRIPT: SECURITY CHECK and DATA LOADING ---
+document.addEventListener('DOMContentLoaded', function() {
+    const currentUsername = localStorage.getItem(USER_DATA_KEY);
+    const resultDiv = document.getElementById('result');
+
+    // 1. SECURITY CHECK: Ensure user is logged in
+    if (!currentUsername) {
+        alert('You must be logged in to view the results.');
+        window.location.href = "login1.html"; 
+        return; // Stop execution
+    }
+
+    // 2. DATA LOADING (Use the user-specific key)
+    const farmDataString = localStorage.getItem(FORM_DATA_PREFIX + currentUsername);
+
+    if (!farmDataString) {
+        resultDiv.innerHTML = `
+            <div class="result-box missing-data-box">
+                <h2>⚠️ డేటా లేదు</h2>
+                <p>వినియోగదారు <span style="font-weight:700;">${currentUsername}</span> కోసం పొలం డేటా కనుగొనబడలేదు. దయచేసి మీ వివరాలను నమోదు చేయడానికి పొలం డేటా ట్యాబ్‌కు వెళ్లండి.</p>
+                <p style="margin-top:10px;"><a href="farmdata.html" style="color:var(--red-alert); text-decoration: underline;">పొలం డేటా పేజీకి వెళ్లండి</a></p>
+            </div>
+        `;
+        return;
+    }
+
+    // 3. Parse Data
+    const data = JSON.parse(farmDataString);
+
+    // 4. Generate Soil Recommendation (Example Logic)
+    let soilRecommendation = '';
+    if (data.ph < PH_OPTIMAL - 0.5) {
+        soilRecommendation = `నేల pH తక్కువగా ఉంది (${data.ph}). సిఫార్సు: మెరుగైన పోషక లభ్యత కోసం pH పెంచడానికి సున్నం (Lime) ను వేయండి.`;
+    } else if (data.ph > PH_OPTIMAL + 0.5) {
+        soilRecommendation = `నేల pH ఎక్కువగా ఉంది (${data.ph}). సిఫార్సు: pH తగ్గించడానికి మరియు నేల నిర్మాణాన్ని మెరుగుపరచడానికి సల్ఫర్ లేదా జిప్సంను వేయండి.`;
+    } else {
+        soilRecommendation = `నేల pH (${data.ph}) సరైనది. పోషక సమతుల్యతను నిర్వహించడంపై దృష్టి పెట్టండి.`;
+    }
+    
+    // 5. Generate NPK Recommendation (Example Logic)
+    let NPKRecommendation = [];
+    if (data.N < 100) NPKRecommendation.push(`నైట్రోజన్ (N): తక్కువగా ఉంది మరియు యూరియా వంటి అధిక-N ఎరువును వేయండి.`);
+    if (data.P < 80) NPKRecommendation.push(`ఫాస్ఫరస్ (P): తక్కువగా ఉంది మరియు DAP లేదా సూపర్ ఫాస్ఫేట్ వేయండి.`);
+    if (data.K < 60) NPKRecommendation.push(`పొటాషియం (K): తక్కువగా ఉంది మరియు మ్యూరియేట్ ఆఫ్ పొటాష్ (MOP) వేయండి.`);
+    
+    if (NPKRecommendation.length === 0) {
+        NPKRecommendation.push("NPK స్థాయిలు: అన్ని స్థాయిలు ప్రస్తుతం సంతృప్తికరంగా ఉన్నాయి. పర్యవేక్షణ కొనసాగించండి.");
+    }
+
+
+    // 6. Display Results
+    resultDiv.innerHTML = `
+        <h2>✅ మీ స్మార్ట్ ఫామ్ సిఫార్సులు</h2>
+        <p style="text-align: center;"><span style="font-weight: 600;">${currentUsername}</span> కోసం విశ్లేషణ | డేటా ${data.timestamp ? new Date(data.timestamp).toLocaleString() : 'N/A'} నుండి</p>
+
+        <div class="section">
+            <h3>🚜 ఇన్‌పుట్ సారాంశం</h3>
+            <div class="info-pair"><span class="label">స్థానం:</span><span class="value">${data.location}</span></div>
+            <div class="info-pair"><span class="label">మునుపటి పంట:</span><span class="value">${data.prevCrop}</span></div>
+            <div class="info-pair"><span class="label">నేల రకం:</span><span class="value">${data.soilType}</span></div>
+            <div class="info-pair"><span class="label">సగటు ఉష్ణోగ్రత:</span><span class="value">${data.temp}°C</span></div>
+        </div>
+
+        <div class="section">
+            <h3>🧪 నేల మరియు పోషక కొలమానాలు</h3>
+            <div class="info-pair"><span class="label">pH స్థాయి:</span><span class="value">${data.ph.toFixed(1)} (సరైనది: ${PH_OPTIMAL})</span></div>
+            <div class="info-pair"><span class="label">నేల తేమ:</span><span class="value">${data.moisture}%</span></div>
+            <div class="info-pair"><span class="label">నైట్రోజన్ (N):</span><span class="value">${data.N} kg/ha</span></div>
+            <div class="info-pair"><span class="label">ఫాస్ఫరస్ (P):</span><span class="value">${data.P} kg/ha</span></div>
+            <div class="info-pair"><span class="label">పొటాషియం (K):</span><span class="value">${data.K} kg/ha</span></div>
+        </div>
+        
+        <div class="section">
+            <h3>💡 వివరణాత్మక సిఫార్సులు</h3>
+            <h4>నేల చికిత్స:</h4>
+            <p>${soilRecommendation}</p>
+            
+            <h4 style="margin-top:15px;">పోషక సర్దుబాటు:</h4>
+            <ul style="list-style-type: none; padding-left: 0;">
+                ${NPKRecommendation.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+        </div>
+        
+        <div class="section cost-section">
+            <h3>💰 అంచనా వ్యయాల వివరాలు (₹)</h3>
+            <div class="info-pair"><span class="label">ఎరువుల ఖర్చు:</span><span class="value">₹${data.fertilizerCost.toFixed(2)}</span></div>
+            <div class="info-pair"><span class="label">నీటిపారుదల ఖర్చు:</span><span class="value">₹${data.irrigationCost.toFixed(2)}</span></div>
+            <div class="info-pair"><span class="label">నేల చికిత్స ఖర్చు:</span><span class="value">₹${data.soilTreatmentCost.toFixed(2)}</span></div>
+            <div class="info-pair"><span class="label">IoT నిర్వహణ ఖర్చు:</span><span class="value">₹${data.IoTCost.toFixed(2)}</span></div>
+        </div>
+
+        <div class="total">
+            ✨ అంచనా వేసిన మొత్తం పొలం ఖర్చు: ₹${data.totalCost.toFixed(2)}
+        </div>
+    `;
+});
+</script>
+</body>
+</html>
